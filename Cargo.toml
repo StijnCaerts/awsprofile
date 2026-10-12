@@ -2,6 +2,12 @@
 name = "awsprofile"
 version = "0.1.0"
 edition = "2024"
+authors = ["Stijn Caerts"]
+description = "TUI application that helps you select and source AWS profiles with fuzzy matching."
+readme = "README.md"
+catecategories = ["command-line-utilities"]
+license = "Apache-2.0"
+homepage = "https://github.com/StijnCaerts/awsprofile"
 
 [dependencies]
 anyhow = "1.0"
