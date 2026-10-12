@@ -14,30 +14,25 @@ impl AwsProfile {
     pub fn to_env(&self) -> Vec<(String, String)> {
         let mut env_vars = vec![("AWS_PROFILE".to_string(), self.name.clone())];
 
-        if let Some(access_key) = self.credentials.get("aws_access_key_id") {
-            env_vars.push(("AWS_ACCESS_KEY_ID".to_string(), access_key.clone()));
+        // Credentials file keys: https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html#CredFileSettings
+        for (key, value) in &self.credentials {
+            let varname = key.to_uppercase();
+            if varname.starts_with("AWS_") {
+                env_vars.push((varname, value.clone()));
+            } else {
+                env_vars.push((format!("AWS_{}", varname), value.clone()));
+            }
         }
 
-        if let Some(secret_key) = self.credentials.get("aws_secret_access_key") {
-            env_vars.push(("AWS_SECRET_ACCESS_KEY".to_string(), secret_key.clone()));
+        // Config file keys: https://docs.aws.amazon.com/sdkref/latest/guide/settings-reference.html#ConfigFileSettings
+        for (key, value) in &self.config {
+            let varname = key.to_uppercase();
+            if varname.starts_with("AWS_") {
+                env_vars.push((varname, value.clone()));
+            } else {
+                env_vars.push((format!("AWS_{}", varname), value.clone()));
+            }
         }
-
-        if let Some(session_token) = self.credentials.get("aws_session_token") {
-            env_vars.push(("AWS_SESSION_TOKEN".to_string(), session_token.clone()));
-        }
-
-        if let Some(region) = self.credentials.get("region") {
-            env_vars.push(("AWS_REGION".to_string(), region.clone()));
-        }
-
-        if let Some(endpoint_url) = self.config.get("endpoint_url") {
-            env_vars.push(("AWS_ENDPOINT_URL".to_string(), endpoint_url.clone()));
-        }
-
-        // AWS_NO_SIGN_REQUEST
-        // AWS_REQUEST_PAYER
-        // AWS_S3_ENDPOINT
-        // AWS_VIRTUAL_HOSTING
 
         env_vars
     }
