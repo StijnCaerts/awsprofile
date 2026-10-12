@@ -1,0 +1,11 @@
+[package]
+name = "awsprofile"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+configparser = "3.0"
+dirs = "7.0"
+skim = "5.7.4"
